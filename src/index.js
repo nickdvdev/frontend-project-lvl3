@@ -1,1 +1,4 @@
-const a = 12;
+import 'bootstrap/dist/css/bootstrap.min.css';
+
+const jesus = 'god';
+console.log(jesus);
