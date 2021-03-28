@@ -1,3 +1,3 @@
 export default () => {
-    console.log('App is launched!');
-}
+  console.log('App is launched!');
+};
