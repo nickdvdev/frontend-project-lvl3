@@ -3,5 +3,5 @@
 // import init from '../src/index';
 
 test('init test', () => {
-  expect(true).toBeTrue();
+  expect(true).toBeTruthy();
 });
