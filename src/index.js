@@ -1,4 +1,4 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
+import app from './app.js';
 
-const jesus = 'god';
-console.log(jesus);
+app();
