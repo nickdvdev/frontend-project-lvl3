@@ -5,6 +5,6 @@ const schema = yup
   .url()
   .matches(/\.rss$/i);
 
-export const validateInputValue = async (value) => schema.isValid(value);
+export const isValidInputValue = async (value) => schema.isValid(value);
 
-export const isDuplicate = () => {};
+export const isDuplicate = (coll, newItem) => coll.includes(newItem);
