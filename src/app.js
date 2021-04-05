@@ -1,5 +1,4 @@
-import onChange from 'on-change';
-import view from './view';
+import { view, watch } from './view';
 import { isDuplicate, isValidInputValue } from './validators';
 import parser from './parser';
 
@@ -12,19 +11,9 @@ export default () => {
     },
   };
 
-  const watchedObject = onChange(state, (path, value) => {
-    if (path === 'isValid') {
-      if (value) {
-        view.input.classList.remove('is-invalid');
-      } else {
-        view.input.classList.add('is-invalid');
-      }
-    }
-    if (path === 'input') {
-      view.input.value = watchedObject.input;
-    }
-  });
+  const watchedObject = watch(state);
 
+  // CONTROLLERS
   view.input.addEventListener('input', (e) => {
     const { value } = e.target;
     watchedObject.input = value;
