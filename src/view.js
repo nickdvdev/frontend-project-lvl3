@@ -4,6 +4,7 @@ export const view = {
   form: document.getElementById('rss-form'),
   input: document.getElementById('rss-input'),
   button: document.getElementById('rss-button'),
+  feed: document.getElementById('rss-feed'),
 };
 
 export const watch = (state) => {

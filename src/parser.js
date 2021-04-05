@@ -1,6 +1,5 @@
-export default async (data, format) => {
-  const awaitData = await data;
+export default (data, format) => {
   const parser = new DOMParser();
-  const newData = parser.parseFromString(awaitData, format);
+  const newData = parser.parseFromString(data, format);
   return newData.documentElement.textContent;
 };
