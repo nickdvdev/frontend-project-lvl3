@@ -22,8 +22,6 @@ export default () => {
 
   view.form.addEventListener('submit', async (e) => {
     e.preventDefault();
-    // const formData = new FormData(e.target);
-    // const url = formData.get('url');
     const isValid =
       (await isValidInputValue(watchedObject.input)) &&
       !isDuplicate(watchedObject.rss.feeds, watchedObject.input);

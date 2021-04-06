@@ -1,5 +1,5 @@
-export default (url) => {
-  return fetch(
+export default (url) =>
+  fetch(
     `https://hexlet-allorigins.herokuapp.com/get?url=${encodeURIComponent(
       `${url}`
     )}`
@@ -11,4 +11,3 @@ export default (url) => {
       throw new Error('Network response was not ok.');
     })
     .then((data) => data.contents);
-};
