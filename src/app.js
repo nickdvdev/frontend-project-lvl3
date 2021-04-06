@@ -8,7 +8,14 @@ export default () => {
     input: '',
     isValid: true,
     rss: {
-      feeds: [],
+      feeds: [
+        {
+          id: 1,
+          title: 'title',
+          description: 'description',
+          link: 'link',
+        },
+      ],
       posts: [],
     },
   };
@@ -46,7 +53,7 @@ export default () => {
   fetchRssData(proxyRssUrl).then((data) => {
     const elDiv = document.createElement('div');
     const newData = parser(data);
-    elDiv.innerHTML = newData;
+    elDiv.innerHTML = JSON.stringify(newData);
     view.feeds.appendChild(elDiv);
   });
 };
