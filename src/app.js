@@ -9,12 +9,12 @@ export default () => {
     isValid: true,
     rss: {
       feeds: [],
+      posts: [],
     },
   };
 
   const watchedObject = watch(state);
 
-  // CONTROLLERS
   view.input.addEventListener('input', (e) => {
     const { value } = e.target;
     watchedObject.input = value;
@@ -26,14 +26,27 @@ export default () => {
       (await isValidInputValue(watchedObject.input)) &&
       !isDuplicate(watchedObject.rss.feeds, watchedObject.input);
     watchedObject.isValid = isValid;
+    if (isValid) {
+      watchedObject.rss.feeds = [
+        ...watchedObject.rss.feeds,
+        watchedObject.input,
+      ];
+    }
   });
 
-  const URL = 'http://lorem-rss.herokuapp.com/feed';
+  const getProxyUrl = (url) => {
+    const proxyURL = 'https://hexlet-allorigins.herokuapp.com';
+    const rssURL = new URL(url);
+    return `${proxyURL}/get/?url=${rssURL}`;
+  };
 
-  fetchRssData(URL).then((data) => {
-    const elP = document.createElement('p');
-    const newData = parser(data, 'application/xml');
-    elP.textContent = newData;
-    document.body.appendChild(elP);
+  const mockURL = 'https://ru.hexlet.io/lessons.rss';
+  const proxyRssUrl = getProxyUrl(mockURL);
+
+  fetchRssData(proxyRssUrl).then((data) => {
+    const elDiv = document.createElement('div');
+    const newData = parser(data);
+    elDiv.innerHTML = newData;
+    view.feeds.appendChild(elDiv);
   });
 };
