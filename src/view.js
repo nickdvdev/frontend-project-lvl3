@@ -1,10 +1,12 @@
 import onChange from 'on-change';
 
 export const view = {
-  form: document.getElementById('rss-form'),
-  input: document.getElementById('rss-input'),
-  button: document.getElementById('rss-button'),
-  feed: document.getElementById('rss-feed'),
+  form: document.querySelector('.rss-form'),
+  input: document.querySelector('input[aria-label="url"]'),
+  button: document.querySelector('input[aria-label="add"]'),
+  feedback: document.querySelector('.feedback'),
+  feeds: document.querySelector('.feeds'),
+  posts: document.querySelector('.posts'),
 };
 
 export const watch = (state) => {
@@ -12,8 +14,12 @@ export const watch = (state) => {
     if (path === 'isValid') {
       if (value) {
         view.input.classList.remove('is-invalid');
+        view.feedback.classList.remove('text-danger');
+        view.feedback.textContent = '';
       } else {
         view.input.classList.add('is-invalid');
+        view.feedback.classList.add('text-danger');
+        view.feedback.textContent = 'Ссылка должна быть валидным URL';
       }
     }
     if (path === 'input') {
