@@ -5,6 +5,18 @@ const schema = yup
   .url()
   .matches(/\.rss$/i);
 
-export const isValidInputValue = async (value) => schema.isValid(value);
+const isValidInputValue = async (value) => schema.isValid(value);
 
-export const isDuplicate = (coll, newItem) => coll.includes(newItem);
+const isDuplicate = (coll, newItem) => coll.includes(newItem);
+
+export default async (feeds, url) => {
+  const isValidRss = await isValidInputValue(url);
+  const isDuplicateRss = isDuplicate(feeds, url);
+  if (!isValidRss) {
+    return 'invalid';
+  }
+  if (isDuplicateRss) {
+    return 'duplicate';
+  }
+  return 'valid';
+};

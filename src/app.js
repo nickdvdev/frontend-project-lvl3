@@ -1,12 +1,12 @@
 import { view, watch } from './view';
-import { isDuplicate, isValidInputValue } from './validators';
 import parser from './parser';
 import fetchRssData from './fetcher';
+import checkUrlValidity from './validators';
 
 export default () => {
   const state = {
     input: '',
-    isValid: true,
+    urlValidity: true,
     rss: {
       feeds: [
         {
@@ -29,11 +29,12 @@ export default () => {
 
   view.form.addEventListener('submit', async (e) => {
     e.preventDefault();
-    const isValid =
-      (await isValidInputValue(watchedObject.input)) &&
-      !isDuplicate(watchedObject.rss.feeds, watchedObject.input);
-    watchedObject.isValid = isValid;
-    if (isValid) {
+    const urlValidity = await checkUrlValidity(
+      watchedObject.rss.feeds,
+      watchedObject.input
+    );
+    watchedObject.urlValidity = urlValidity;
+    if (urlValidity === 'valid') {
       watchedObject.rss.feeds = [
         ...watchedObject.rss.feeds,
         watchedObject.input,

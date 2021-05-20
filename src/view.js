@@ -11,11 +11,16 @@ export const view = {
 
 export const watch = (state) => {
   const watchedObject = onChange(state, (path, value) => {
-    if (path === 'isValid') {
-      if (value) {
+    if (path === 'urlValidity') {
+      if (value === 'valid') {
         view.input.classList.remove('is-invalid');
         view.feedback.classList.remove('text-danger');
-        view.feedback.textContent = '';
+        view.feedback.classList.add('text-success');
+        view.feedback.textContent = 'RSS успешно загружен';
+      } else if (value === 'duplicate') {
+        view.input.classList.add('is-invalid');
+        view.feedback.classList.add('text-danger');
+        view.feedback.textContent = 'RSS уже существует';
       } else {
         view.input.classList.add('is-invalid');
         view.feedback.classList.add('text-danger');
