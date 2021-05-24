@@ -1,4 +1,4 @@
-import { view, watch } from './view';
+import { render, view, watch } from './view.js';
 import parser from './parser';
 import fetchRssData from './fetcher';
 import checkUrlValidity from './validators';
@@ -12,11 +12,18 @@ export default () => {
         {
           id: 1,
           title: 'title',
-          description: 'description',
-          link: 'link',
+          description: 'description text',
         },
       ],
-      posts: [],
+      posts: [
+        {
+          id: 1, // guid
+          title: 'title',
+          description: 'description',
+          link: 'link',
+          date: 'date', // pubdate
+        },
+      ],
     },
   };
 
@@ -57,4 +64,7 @@ export default () => {
     elDiv.innerHTML = JSON.stringify(newData);
     view.feeds.appendChild(elDiv);
   });
+
+  const { feeds, posts } = state.rss;
+  render(feeds, posts);
 };
