@@ -1,5 +1,6 @@
 import { render, view, watch } from './view.js';
 import parser from './parser';
+import getProxyUrl from './proxy';
 import fetchRssData from './fetcher';
 import checkUrlValidity from './validators';
 
@@ -48,12 +49,6 @@ export default () => {
       ];
     }
   });
-
-  const getProxyUrl = (url) => {
-    const proxyURL = 'https://hexlet-allorigins.herokuapp.com';
-    const rssURL = new URL(url);
-    return `${proxyURL}/get/?url=${rssURL}`;
-  };
 
   const mockURL = 'https://ru.hexlet.io/lessons.rss';
   const proxyRssUrl = getProxyUrl(mockURL);
