@@ -9,22 +9,9 @@ export default () => {
     input: '',
     urlValidity: true,
     rss: {
-      feeds: [
-        {
-          id: 1,
-          title: 'title',
-          description: 'description text',
-        },
-      ],
-      posts: [
-        {
-          id: 1, // guid
-          title: 'title',
-          description: 'description',
-          link: 'link',
-          date: 'date', // pubdate
-        },
-      ],
+      feeds: [],
+      posts: [],
+      links: [],
     },
   };
 
@@ -38,13 +25,13 @@ export default () => {
   view.form.addEventListener('submit', async (e) => {
     e.preventDefault();
     const urlValidity = await checkUrlValidity(
-      watchedObject.rss.feeds,
+      watchedObject.rss.links,
       watchedObject.input
     );
     watchedObject.urlValidity = urlValidity;
     if (urlValidity === 'valid') {
-      watchedObject.rss.feeds = [
-        ...watchedObject.rss.feeds,
+      watchedObject.rss.links = [
+        ...watchedObject.rss.links,
         watchedObject.input,
       ];
     }
@@ -54,12 +41,13 @@ export default () => {
   const proxyRssUrl = getProxyUrl(mockURL);
 
   fetchRssData(proxyRssUrl).then((data) => {
-    const elDiv = document.createElement('div');
     const newData = parser(data);
-    elDiv.innerHTML = JSON.stringify(newData);
-    view.feeds.appendChild(elDiv);
+    const { feed, posts } = newData;
+    watchedObject.rss.feeds = [...watchedObject.rss.feeds, feed];
+    watchedObject.rss.posts = [...watchedObject.rss.posts, posts];
+    console.log(watchedObject);
   });
 
-  const { feeds, posts } = state.rss;
+  const { feeds, posts } = watchedObject.rss;
   render(feeds, posts);
 };
