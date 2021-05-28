@@ -102,11 +102,14 @@ export const watch = (state) => {
     if (path === 'input') {
       view.input.value = watchedObject.input;
     }
-    if (path === 'feeds') {
+    if (path === 'rss.feeds') {
+      console.log('I am in FEEDS view update');
       if (state.rss.feeds.length > 0) {
         renderFeeds(state.rss.feeds);
       }
-      // render posts
+    }
+    if (path === 'rss.posts') {
+      console.log('I am in POSTS view update');
       if (state.rss.posts.length > 0) {
         renderPosts(state.rss.posts);
       }
