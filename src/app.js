@@ -1,8 +1,10 @@
+import i18next from 'i18next';
 import { view, watch } from './view.js';
 import parser from './parser';
 import getProxyUrl from './proxy';
 import fetchRssData from './fetcher';
 import checkUrlValidity from './validators';
+import locales from './locales';
 
 export default () => {
   const state = {
@@ -14,6 +16,16 @@ export default () => {
       links: [],
     },
   };
+
+  i18next
+    .init({
+      lng: 'ru',
+      debug: true,
+      resources: {
+        ru: locales.ru,
+      },
+    })
+    .then((t) => t);
 
   const watchedObject = watch(state);
 

@@ -1,3 +1,4 @@
+import i18next from 'i18next';
 import onChange from 'on-change';
 
 export const view = {
@@ -12,7 +13,7 @@ export const view = {
 const renderFeeds = (feeds) => {
   // header
   const feedsHeader = document.createElement('h2');
-  feedsHeader.innerHTML = 'Фиды';
+  feedsHeader.innerHTML = i18next.t('feeds');
   view.feeds.appendChild(feedsHeader);
   // container
   const feedsList = document.createElement('ul');
@@ -39,7 +40,7 @@ const renderFeeds = (feeds) => {
 const renderPosts = (posts) => {
   // header
   const postsHeader = document.createElement('h3');
-  postsHeader.innerHTML = 'Посты';
+  postsHeader.innerHTML = i18next.t('posts');
   view.posts.appendChild(postsHeader);
   // container
   const postsList = document.createElement('ul');
@@ -67,7 +68,7 @@ const renderPosts = (posts) => {
     // post list item's button
     const postButton = document.createElement('button');
     postItem.appendChild(postButton);
-    postButton.textContent = 'Просмотр';
+    postButton.textContent = i18next.t('linkButton');
     postButton.classList.add('btn', 'btn-primary', 'btn-sm');
     postButton.setAttribute('type', 'button');
     postButton.setAttribute('data-id', '2');
@@ -88,28 +89,26 @@ export const watch = (state) => {
         view.input.classList.remove('is-invalid');
         view.feedback.classList.remove('text-danger');
         view.feedback.classList.add('text-success');
-        view.feedback.textContent = 'RSS успешно загружен';
+        view.feedback.textContent = i18next.t('rssLinkAdded');
       } else if (value === 'duplicate') {
         view.input.classList.add('is-invalid');
         view.feedback.classList.add('text-danger');
-        view.feedback.textContent = 'RSS уже существует';
+        view.feedback.textContent = i18next.t('rssLinkIsDuplicate');
       } else {
         view.input.classList.add('is-invalid');
         view.feedback.classList.add('text-danger');
-        view.feedback.textContent = 'Ссылка должна быть валидным URL';
+        view.feedback.textContent = i18next.t('rssLinkInvalid');
       }
     }
     if (path === 'input') {
       view.input.value = watchedObject.input;
     }
     if (path === 'rss.feeds') {
-      console.log('I am in FEEDS view update');
       if (state.rss.feeds.length > 0) {
         renderFeeds(state.rss.feeds);
       }
     }
     if (path === 'rss.posts') {
-      console.log('I am in POSTS view update');
       if (state.rss.posts.length > 0) {
         renderPosts(state.rss.posts);
       }
