@@ -45,16 +45,13 @@ export default () => {
 
   const getParsedRssData = (url) => {
     const proxyRssUrl = getProxyUrl(url);
-    getFeedData(proxyRssUrl).then((data) => {
-      const newData = parser(data);
-      return newData;
-    });
+    return getFeedData(proxyRssUrl).then((data) => parser(data));
   };
 
   const updateFeed = (url) => {
     const delay = 5000;
-    setTimeout(() => {
-      const { feed, posts } = getParsedRssData(url);
+    setTimeout(async () => {
+      const { feed, posts } = await getParsedRssData(url);
       watchedObject.feeds = [...watchedObject.feeds, feed];
       watchedObject.posts = [...watchedObject.posts, ...posts];
       const diff = _.differenceWith(posts, watchedObject.posts, getNewPosts);
@@ -66,37 +63,6 @@ export default () => {
       updateFeed(url);
     }, delay);
   };
-
-  // const updatePosts = () => {
-  //   const { feeds, posts } = watchedObject;
-  //   if (feeds.length === 0) {
-  //     setTimeout(updatePosts, 5000);
-  //   }
-  //   feeds.forEach((feed) => {
-  //     const oldPosts = posts.filter((post) => post.id === feed.id);
-  //     const url = getUrl(feed.link);
-  //     axios
-  //       .get(url)
-  //       .then((response) => {
-  //         const data = parse(response.data);
-  //         return data.posts.map((post) => ({ ...post, id: feed.id }));
-  //       })
-  //       .then((currentPosts) => getNewPosts(currentPosts, oldPosts))
-  //       .then((newPosts) => {
-  //         if (newPosts.length !== 0) {
-  //           newPosts.forEach((post) => [post, ...state.posts]);
-  //         }
-  //       })
-  //       .catch((error) => {
-  //         state.form.valid = false;
-  //         state.form.processForm = 'filling';
-  //         state.form.error = 'network';
-  //         throw error;
-  //       })
-  //       .finally(() => setTimeout(updatePosts, 5000));
-  //   });
-  // };
-  // updatePosts();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
