@@ -11,6 +11,8 @@ export const view = {
 };
 
 const renderFeeds = (feeds) => {
+  // clean the div
+  view.feeds.innerHTML = '';
   // header
   const feedsHeader = document.createElement('h2');
   feedsHeader.innerHTML = i18next.t('feeds');
@@ -38,6 +40,8 @@ const renderFeeds = (feeds) => {
 };
 
 const renderPosts = (posts) => {
+  // clean the div
+  view.posts.innerHTML = '';
   // header
   const postsHeader = document.createElement('h3');
   postsHeader.innerHTML = i18next.t('posts');
@@ -103,14 +107,14 @@ export const watch = (state) => {
     if (path === 'input') {
       view.input.value = watchedObject.input;
     }
-    if (path === 'rss.feeds') {
-      if (state.rss.feeds.length > 0) {
-        renderFeeds(state.rss.feeds);
+    if (path === 'feeds') {
+      if (state.feeds.length > 0) {
+        renderFeeds(state.feeds);
       }
     }
-    if (path === 'rss.posts') {
-      if (state.rss.posts.length > 0) {
-        renderPosts(state.rss.posts);
+    if (path === 'posts') {
+      if (state.posts.length > 0) {
+        renderPosts(state.posts);
       }
     }
   });
