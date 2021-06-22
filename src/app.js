@@ -1,40 +1,48 @@
-import _ from 'lodash';
 import i18next from 'i18next';
-import { render, view, watch } from './view.js';
-import parser from './parser';
-import getProxyUrl from './proxy';
-import fetchFeedData from './fetcher';
-import checkUrlValidity from './validators';
-import locales from './locales';
+import initview from './view';
+import {
+  sendRequest,
+  addRss,
+  validate,
+  getLoadingProcessErrorType,
+  fetchNewPosts,
+} from './utils';
+import parse from './parser';
+import resources from './locales';
 
-const getNewPosts = (currentPosts, oldPosts) =>
-  _.differenceWith(currentPosts, oldPosts, _.isEqual);
-
-export default () => {
-  i18next
-    .init({
-      lng: 'ru',
-      debug: false,
-      resources: {
-        ru: locales.ru,
-      },
-    })
-    .then((t) => t);
+const init = (i18n) => {
+  const elements = {
+    form: document.querySelector('form'),
+    input: document.querySelector('input'),
+    posts: document.querySelector('.posts'),
+    feeds: document.querySelector('.feeds'),
+    feedback: document.querySelector('.feedback'),
+    submitButton: document.querySelector('button.add'),
+    modalElements: {
+      modalContainer: document.querySelector('#modal'),
+      modalTitle: document.querySelector('.modal-title'),
+      modalBody: document.querySelector('.modal-body'),
+      modalRef: document.querySelector('.full-article'),
+    },
+  };
 
   const state = {
     form: {
-      processState: 'filling',
-      processError: null,
-      input: null,
-      valid: true,
-      error: null,
+      rssField: {
+        valid: true,
+        error: null,
+      },
     },
-    feeds: [],
+    modalContentId: null,
     posts: [],
-    links: [],
+    feeds: [],
+    savedUrls: [],
+    error: null,
+    dataProcess: 'initial',
+    uiState: {
+      readPosts: new Set(),
+    },
   };
-
-  const watchedObject = watch(state);
 
   window.onload = () => {
     const preloader = document.querySelector('.spinner');
@@ -43,60 +51,70 @@ export default () => {
     }, 1000);
   };
 
-  const getParsedRssData = async (url) => {
-    const proxyRssUrl = getProxyUrl(url);
-    const result = await fetchFeedData(proxyRssUrl).then((data) =>
-      parser(data)
-    );
-    return result;
-  };
+  const watchedState = initview(state, elements, i18n);
 
-  const updateFeed = async () => {
-    const delay = 2000;
-    setTimeout(async () => {
-      console.log('UPDATING');
-      const { feeds, posts, links } = watchedObject;
-      const newFeedsColl = [];
-      const newPostsColl = [];
-      await links.forEach(async (link) => {
-        const { feed: newFeed, posts: newPosts } = await getParsedRssData(link);
-        newFeedsColl.push(newFeed);
-        newPostsColl.push(newPosts);
-      });
-      console.log(newFeedsColl);
-      console.log(newPostsColl);
-      const diffFeeds = _.differenceWith(newFeedsColl, feeds, _.isEqual);
-      const diffPosts = _.differenceWith(newPostsColl, posts, _.isEqual);
-      if (!_.isEmpty(diffFeeds) || !_.isEmpty(diffPosts)) {
-        watchedObject.feeds = newFeedsColl;
-        watchedObject.posts = newPostsColl;
-        render(watchedObject.feeds, watchedObject.posts);
-      }
-
-      await updateFeed();
-    }, delay);
-  };
-
-  const handleSubmit = async (e) => {
+  elements.form.addEventListener('submit', (e) => {
     e.preventDefault();
-    watchedObject.form.processState = 'sending';
-    const url = watchedObject.form.input;
-    const urlValid = await checkUrlValidity(watchedObject.links, url);
-    watchedObject.form.valid = urlValid;
-    if (urlValid === 'valid') {
-      watchedObject.links = [...watchedObject.links, url];
-      updateFeed();
-    }
-  };
 
-  const handleInput = (e) => {
-    const { value } = e.target;
-    if (e.target.value === '') {
-      state.form.processState = 'filling';
-    }
-    watchedObject.form.input = value;
-  };
+    const formData = new FormData(e.target);
+    const url = formData.get('url');
 
-  view.form.addEventListener('submit', handleSubmit);
-  view.input.addEventListener('input', handleInput);
+    const urls = watchedState.savedUrls;
+
+    const error = validate(url, urls, i18n);
+
+    if (error) {
+      watchedState.form.rssField = {
+        valid: false,
+        error,
+      };
+      return;
+    }
+
+    watchedState.form.rssField = {
+      valid: true,
+      error: null,
+    };
+
+    watchedState.dataProcess = 'sending';
+
+    sendRequest(url)
+      .then((xml) => {
+        const data = parse(xml);
+        watchedState.savedUrls.push(url);
+        addRss(data, watchedState, url);
+        watchedState.error = null;
+        watchedState.dataProcess = 'processed';
+      })
+      .catch((err) => {
+        watchedState.dataProcess = 'failed';
+        watchedState.error = getLoadingProcessErrorType(err);
+      });
+  });
+
+  elements.posts.addEventListener('click', (e) => {
+    if (!('id' in e.target.dataset)) {
+      return;
+    }
+
+    const { id } = e.target.dataset;
+    watchedState.uiState.readPosts.add(id);
+    watchedState.modalContentId = id;
+  });
+
+  fetchNewPosts(watchedState);
 };
+
+const runApp = () => {
+  const defaultLanguage = 'ru';
+  const newInstance = i18next.createInstance();
+  newInstance
+    .init({
+      lng: defaultLanguage,
+      debug: true,
+      resources,
+    })
+    .then(() => init(newInstance));
+};
+
+export default runApp;

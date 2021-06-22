@@ -1,4 +1,4 @@
-import 'bootstrap/dist/css/bootstrap.min.css';
-import app from './app.js';
+import './style/main.scss';
+import runApp from './app';
 
-app();
+runApp();
