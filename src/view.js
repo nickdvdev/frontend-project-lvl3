@@ -82,13 +82,15 @@ const renderPosts = (posts) => {
 };
 
 export const render = (feeds, posts) => {
-  renderFeeds(feeds);
-  renderPosts(posts);
+  if (feeds.length > 0) {
+    renderFeeds(feeds);
+    renderPosts(posts);
+  }
 };
 
 export const watch = (state) => {
   const watchedObject = onChange(state, (path, value) => {
-    if (path === 'urlValidity') {
+    if (path === 'form.valid') {
       if (value === 'valid') {
         view.input.classList.remove('is-invalid');
         view.feedback.classList.remove('text-danger');
@@ -104,18 +106,8 @@ export const watch = (state) => {
         view.feedback.textContent = i18next.t('rssLinkInvalid');
       }
     }
-    if (path === 'input') {
-      view.input.value = watchedObject.input;
-    }
-    if (path === 'feeds') {
-      if (state.feeds.length > 0) {
-        renderFeeds(state.feeds);
-      }
-    }
-    if (path === 'posts') {
-      if (state.posts.length > 0) {
-        renderPosts(state.posts);
-      }
+    if (path === 'form.input') {
+      view.input.value = watchedObject.form.input;
     }
   });
 
