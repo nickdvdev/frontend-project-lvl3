@@ -1,37 +1,27 @@
-import _ from 'lodash';
-
-export default (data) => {
+const parse = (xml) => {
   const parser = new DOMParser();
-  const newData = parser.parseFromString(data, 'text/html');
-  // FEED
-  const feedId = _.uniqueId();
-  const title = newData.documentElement.querySelector('channel title')
-    .textContent;
-  const description = newData.documentElement.querySelector(
-    'channel description'
-  ).textContent;
-  const feed = {
-    id: feedId,
-    title,
-    description,
-  };
-  // POSTS
-  const postItems = newData.documentElement.querySelectorAll('Item');
-  let posts = [];
-  postItems.forEach((post) => {
-    const postTitle = post.querySelector('title').textContent;
-    const postDescription = post.querySelector('description').textContent;
-    const postLink = post.querySelector('link').textContent;
-    const postGuid = post.querySelector('guid').textContent;
-    const newPost = {
-      feedId,
-      id: postGuid,
-      title: postTitle,
-      description: postDescription,
-      link: postLink,
-    };
-    posts = [...posts, newPost];
-  });
+  const docXml = parser.parseFromString(xml, 'text/xml');
+
+  const errorEl = docXml.querySelector('parsererror');
+
+  if (errorEl) {
+    const error = new Error('Parse error');
+    error.isParsingError = true;
+    throw error;
+  }
+
+  const title = docXml.querySelector('title').textContent;
+  const description = docXml.querySelector('description').textContent;
+
+  const feed = { title, description };
+  const items = docXml.querySelectorAll('item');
+  const posts = Array.from(items).map((item) => ({
+    title: item.querySelector('title').textContent,
+    description: item.querySelector('description').textContent,
+    postLink: item.querySelector('link').textContent,
+  }));
 
   return { feed, posts };
 };
+
+export default parse;

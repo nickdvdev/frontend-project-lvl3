@@ -1,60 +1,93 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>RSS Aggregator</title>
-  </head>
-  <body class="d-flex flex-column min-vh-100">
-    <main class="flex-grow-1">
-      <section class="container-fluid bg-dark p-5">
-        <div class="spinner">
-          <div
-            class="bg-white fixed-top h-100 w-100 d-flex align-items-center justify-content-center"
+<body class="d-flex flex-column min-vh-100">
+  <div
+    class="modal fade"
+    id="modal"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="modal"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title"></h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body"></div>
+        <div class="modal-footer">
+          <a
+            class="btn btn-primary full-article"
+            href="#"
+            role="button"
+            target="_blank"
+            rel="noopener noreferrer"
           >
-            <div class="spinner-border text-success p-4" role="status">
-              <span class="sr-only">Loading...</span>
-            </div>
+            Read
+          </a>
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <main class="flex-grow-1">
+    <section class="container-fluid bg-dark p-5">
+      <div class="spinner">
+        <div
+          class="bg-white fixed-top h-100 w-100 d-flex align-items-center justify-content-center"
+        >
+          <div class="spinner-border text-success p-4" role="status">
+            <span class="sr-only">Loading...</span>
           </div>
         </div>
-        <div class="row">
-          <div class="col-md-10 col-lg-8 mx-auto text-white">
-            <h1 class="display-3">RSS агрегатор</h1>
-            <p class="lead">
-              Начните читать RSS сегодня! Это легко, это красиво.
-            </p>
-            <form action="" class="rss-form">
-              <div class="form-row">
-                <div class="col">
-                  <input
-                    autofocus
-                    required
-                    name="url"
-                    aria-label="url"
-                    class="form-control form-control-lg w-100"
-                    placeholder="ссылка RSS"
-                  />
-                </div>
-                <div class="col-auto">
-                  <button
-                    type="submit"
-                    aria-label="add"
-                    class="btn btn-lg btn-primary px-sm-5"
-                  >
-                    Add
-                  </button>
-                </div>
+      </div>
+      <div class="row">
+        <div class="col-md-10 col-lg-8 mx-auto text-white">
+          <h1 class="display-3">RSS агрегатор</h1>
+          <p class="lead">
+            Начните читать RSS сегодня! Это легко, это красиво!
+          </p>
+          <form class="rss-form" action>
+            <div class="row g-3">
+              <div class="col px-2">
+                <input
+                  autofocus
+                  required
+                  name="url"
+                  aria-label="url"
+                  type="text"
+                  placeholder="ссылка RSS"
+                  class="form-control form-control-lg w-100"
+                />
               </div>
-            </form>
-            <p class="text-muted my-1">
-              Пример: https://ru.hexlet.io/lessons.rss
-            </p>
-            <div class="feedback"></div>
-          </div>
+              <div class="col-auto px-2">
+                <button
+                  type="submit"
+                  aria-label="add"
+                  class="btn btn-lg btn-primary px-sm-5 add"
+                >
+                  Add
+                </button>
+              </div>
+            </div>
+          </form>
+          <p class="text-muted my-1">
+            Пример: https://ru.hexlet.io/lessons.rss
+          </p>
+          <div class="feedback"></div>
         </div>
-      </section>
-    </main>
+      </div>
+    </section>
     <section class="container-fluid p-5">
       <div class="row">
         <div class="col-md-10 col-lg-8 mx-auto feeds"></div>
@@ -63,16 +96,15 @@
         <div class="col-md-10 col-lg-8 mx-auto posts"></div>
       </div>
     </section>
-
-    <footer class="footer border-top py-3 mt-5">
-      <div class="container-xl">
-        <div class="text-center">
-          created by
-          <a href="https://github.com/nickdvdev/" target="_blank"
-            >Nick Dmytriienko</a
-          >
-        </div>
+  </main>
+  <footer class="footer border-top py-3 mt-5">
+    <div class="container-xl">
+      <div class="text-center">
+        created by
+        <a href="https://github.com/nickdvdev/" target="_blank"
+          >Nick Dmytriienko</a
+        >
       </div>
-    </footer>
-  </body>
-</html>
+    </div>
+  </footer>
+</body>

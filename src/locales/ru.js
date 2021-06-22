@@ -1,12 +1,16 @@
 export default {
   translation: {
-    fetcherError: 'Проблемы с сетью',
-    feeds: 'Фиды',
-    posts: 'Посты',
-    linkButton: 'Просмотр',
-    rssLinkAdded: 'RSS успешно загружен',
-    rssLinkIsDuplicate: 'RSS уже существует',
-    rssLinkInvalid: 'Ссылка должна быть валидным URL',
-    yupDefaultErrorMessage: 'Неизвестная ошибка при валидации',
+    successMessage: 'RSS успешно загружен',
+    errorMessage: {
+      existedRss: 'RSS уже существует',
+      invalidUrl: 'Ссылка должна быть валидным URL',
+      invalidRSS: 'Ресурс не содержит валидный RSS',
+      emptyField: 'Не должно быть пустым',
+      network: 'Ошибка сети',
+      unknownError: 'неизвестная ошибка',
+    },
+    view: 'Просмотр',
+    postsHead: 'Посты',
+    feedsHead: 'Фиды',
   },
 };
