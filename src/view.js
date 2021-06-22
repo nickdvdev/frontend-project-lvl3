@@ -157,6 +157,8 @@ const renderModalContent = (state, elements) => {
   const { modalContentId: id, posts } = state;
   const relatedPost = posts.find((post) => post.postId === id);
   const { title, description, postLink } = relatedPost;
+  elements.modalElements.modalContainer.classList.add('show');
+  elements.modalElements.modalContainer.style.display = 'block';
   elements.modalElements.modalTitle.textContent = title;
   elements.modalElements.modalBody.textContent = description;
   elements.modalElements.modalRef.href = postLink;

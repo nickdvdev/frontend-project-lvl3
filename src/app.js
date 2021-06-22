@@ -23,6 +23,9 @@ const init = (i18n) => {
       modalTitle: document.querySelector('.modal-title'),
       modalBody: document.querySelector('.modal-body'),
       modalRef: document.querySelector('.full-article'),
+      modalCloseButtons: document.querySelectorAll(
+        'button[data-bs-dismiss="modal"]'
+      ),
     },
   };
 
@@ -53,6 +56,7 @@ const init = (i18n) => {
 
   const watchedState = initview(state, elements, i18n);
 
+  console.log(elements.modalElements);
   elements.form.addEventListener('submit', (e) => {
     e.preventDefault();
 
@@ -90,6 +94,16 @@ const init = (i18n) => {
         watchedState.dataProcess = 'failed';
         watchedState.error = getLoadingProcessErrorType(err);
       });
+  });
+
+  const handleClose = (e) => {
+    e.preventDefault();
+    console.log('Working');
+    watchedState.modalContentId = null;
+  };
+
+  elements.modalElements.modalCloseButtons.forEach((button) => {
+    button.addEventListener('click', handleClose);
   });
 
   elements.posts.addEventListener('click', (e) => {
