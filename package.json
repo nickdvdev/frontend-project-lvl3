@@ -6,7 +6,7 @@
   "scripts": {
     "build-dev": "npx webpack",
     "build": "NODE_ENV=production npx webpack",
-    "develop": "webpack-dev-server --open",
+    "develop": "webpack serve",
     "prepublishOnly": "npm run build",
     "deploy": "npx surge ./dist/ rssviewer.surge.sh",
     "predeploy": "npm run build",
