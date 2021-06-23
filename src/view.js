@@ -155,6 +155,11 @@ const renderForm = (dataProcess, elements, i18n) => {
 
 const renderModalContent = (state, elements) => {
   const { modalContentId: id, posts } = state;
+  if (!id) {
+    elements.modalElements.modalContainer.classList.remove('show');
+    elements.modalElements.modalContainer.style.display = 'none';
+    return;
+  }
   const relatedPost = posts.find((post) => post.postId === id);
   const { title, description, postLink } = relatedPost;
   elements.modalElements.modalContainer.classList.add('show');

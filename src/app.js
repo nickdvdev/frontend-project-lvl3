@@ -24,7 +24,7 @@ const init = (i18n) => {
       modalBody: document.querySelector('.modal-body'),
       modalRef: document.querySelector('.full-article'),
       modalCloseButtons: document.querySelectorAll(
-        'button[data-bs-dismiss="modal"]'
+        'button[data-dismiss="modal"]'
       ),
     },
   };
@@ -56,7 +56,6 @@ const init = (i18n) => {
 
   const watchedState = initview(state, elements, i18n);
 
-  console.log(elements.modalElements);
   elements.form.addEventListener('submit', (e) => {
     e.preventDefault();
 
@@ -98,7 +97,6 @@ const init = (i18n) => {
 
   const handleClose = (e) => {
     e.preventDefault();
-    console.log('Working');
     watchedState.modalContentId = null;
   };
 
