@@ -4,10 +4,13 @@
   "description": "RSS Aggregator for Hexlet",
   "main": "src/index.js",
   "scripts": {
-    "test": "jest --colors",
-    "start": "webpack",
-    "dev": "webpack serve",
-    "build": "webpack"
+    "build-dev": "npx webpack",
+    "build": "NODE_ENV=production npx webpack",
+    "develop": "webpack-dev-server --open",
+    "prepublishOnly": "npm run build",
+    "deploy": "npx surge ./dist/ rssviewer.surge.sh",
+    "predeploy": "npm run build",
+    "test": "jest"
   },
   "repository": {
     "type": "git",

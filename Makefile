@@ -1,13 +1,32 @@
-develop:
-	npx webpack serve
 install:
-	npm ci
+	npm install
+
+publish:
+	npm login
+	npm publish --dry-run
+
 build:
-	rm -rf dist
-	NODE_ENV=production npx webpack
-test:
-	npm test
+	npm run build
+
+build-dev:
+	npm run build-dev
+
+develop:
+	npm run develop
+
 lint:
 	npx eslint .
+
+test:
+	npm test
+
+test-coverage:
+	npm test -- --coverage
+
+test-watch:
+	npm test -- --watch
+
+make deploy:
+	npm run deploy
 
 .PHONY: test

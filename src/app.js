@@ -10,6 +10,8 @@ import {
 import parse from './parser';
 import resources from './locales';
 
+console.log(process.env.NODE_ENV);
+
 const init = (i18n) => {
   const elements = {
     form: document.querySelector('form'),
