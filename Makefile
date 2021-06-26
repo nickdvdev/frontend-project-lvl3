@@ -1,10 +1,6 @@
 install:
 	npm ci
 
-publish:
-	npm login
-	npm publish --dry-run
-
 build:
 	npm run build
 
@@ -25,8 +21,5 @@ test-coverage:
 
 test-watch:
 	npm test -- --watch
-
-make deploy:
-	npm run deploy
 
 .PHONY: test
