@@ -10,8 +10,6 @@ import {
 import parse from './parser';
 import resources from './locales';
 
-console.log(process.env.NODE_ENV);
-
 const init = (i18n) => {
   const elements = {
     form: document.querySelector('form'),
@@ -128,8 +126,7 @@ const runApp = () => {
       debug: true,
       resources,
     })
-    .then(() => init(newInstance))
-    .catch((e) => new Error(e));
+    .then(() => init(newInstance));
 };
 
 export default runApp;
