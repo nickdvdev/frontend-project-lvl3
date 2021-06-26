@@ -6,7 +6,9 @@ module.exports = {
   output: {
     filename: 'bundle.js',
     path: path.resolve(__dirname, 'dist'),
+    sourceMapFilename: '[name].js.map',
   },
+  devtool: 'source-map',
   mode: process.env.NODE_ENV || 'development',
   module: {
     rules: [
