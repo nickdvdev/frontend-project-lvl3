@@ -65,16 +65,12 @@ export default () => {
 
   const watchedState = initview(state, elements);
 
-  elements.form.addEventListener('submit', (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-
     const formData = new FormData(e.target);
     const url = formData.get('url');
-
     const urls = watchedState.savedUrls;
-
     const error = validate(url, urls);
-
     if (error) {
       watchedState.form.rssField = {
         valid: false,
@@ -82,14 +78,11 @@ export default () => {
       };
       return;
     }
-
     watchedState.form.rssField = {
       valid: true,
       error: null,
     };
-
     watchedState.dataProcess = 'sending';
-
     sendRequest(url)
       .then((xml) => {
         const data = parse(xml);
@@ -102,16 +95,12 @@ export default () => {
         watchedState.dataProcess = 'failed';
         watchedState.error = getLoadingProcessErrorType(err);
       });
-  });
+  };
 
   const handleClose = (e) => {
     e.preventDefault();
     watchedState.modalContentId = null;
   };
-
-  elements.modalElements.modalCloseButtons.forEach((button) => {
-    button.addEventListener('click', handleClose);
-  });
 
   elements.posts.addEventListener('click', (e) => {
     if (!('id' in e.target.dataset)) {
@@ -123,5 +112,10 @@ export default () => {
     watchedState.modalContentId = id;
   });
 
+  elements.modalElements.modalCloseButtons.forEach((button) => {
+    button.addEventListener('click', handleClose);
+  });
+
+  elements.form.addEventListener('submit', handleSubmit);
   fetchNewPosts(watchedState);
 };
