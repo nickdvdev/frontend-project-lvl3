@@ -1,4 +1,4 @@
 import './style/main.scss';
-import runApp from './app';
+import app from './app';
 
-runApp();
+app();

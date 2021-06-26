@@ -10,9 +10,16 @@ import {
 import parse from './parser';
 import resources from './locales';
 
-console.log(process.env.NODE_ENV);
+export default () => {
+  const defaultLanguage = 'ru';
+  i18next
+    .init({
+      lng: defaultLanguage,
+      debug: true,
+      resources,
+    })
+    .catch((e) => new Error(e));
 
-const init = (i18n) => {
   const elements = {
     form: document.querySelector('form'),
     input: document.querySelector('input'),
@@ -56,7 +63,7 @@ const init = (i18n) => {
     }, 1000);
   };
 
-  const watchedState = initview(state, elements, i18n);
+  const watchedState = initview(state, elements);
 
   elements.form.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -66,7 +73,7 @@ const init = (i18n) => {
 
     const urls = watchedState.savedUrls;
 
-    const error = validate(url, urls, i18n);
+    const error = validate(url, urls);
 
     if (error) {
       watchedState.form.rssField = {
@@ -118,17 +125,3 @@ const init = (i18n) => {
 
   fetchNewPosts(watchedState);
 };
-
-const runApp = () => {
-  const defaultLanguage = 'ru';
-  const newInstance = i18next.createInstance();
-  newInstance
-    .init({
-      lng: defaultLanguage,
-      debug: true,
-      resources,
-    })
-    .then(() => init(newInstance));
-};
-
-export default runApp;

@@ -2,6 +2,7 @@
 
 import onChange from 'on-change';
 import 'bootstrap/js/dist/modal';
+import i18next from 'i18next';
 
 const linkFontClassBootstrap = {
   default: 'font-weight-bold',
@@ -13,11 +14,11 @@ const linkFontClassBootstrap5 = {
   read: 'fw-normal',
 };
 
-const renderFeeds = (state, elements, i18n) => {
+const renderFeeds = (state, elements) => {
   elements.feeds.innerHTML = '';
   const { feeds } = state;
   const feedsHead = document.createElement('h2');
-  feedsHead.textContent = i18n.t('feedsHead');
+  feedsHead.textContent = i18next.t('feedsHead');
   elements.feeds.append(feedsHead);
   const ul = document.createElement('ul');
   ul.classList.add('list-group');
@@ -37,14 +38,14 @@ const renderFeeds = (state, elements, i18n) => {
   });
 };
 
-const renderPosts = (state, elements, i18n) => {
+const renderPosts = (state, elements) => {
   elements.posts.innerHTML = '';
   const { posts } = state;
   if (posts.length === 0) {
     return;
   }
   const postsHead = document.createElement('h2');
-  postsHead.textContent = i18n.t('postsHead');
+  postsHead.textContent = i18next.t('postsHead');
   elements.posts.append(postsHead);
   const ul = document.createElement('ul');
   ul.classList.add('list-group');
@@ -87,7 +88,7 @@ const renderPosts = (state, elements, i18n) => {
     modalButton.setAttribute('data-id', `${postId}`);
     modalButton.setAttribute('data-bs-toggle', 'modal');
     modalButton.setAttribute('data-bs-target', '#modal');
-    modalButton.textContent = i18n.t('view');
+    modalButton.textContent = i18next.t('view');
 
     postContainer.append(linkElement);
     postContainer.append(modalButton);
@@ -96,14 +97,14 @@ const renderPosts = (state, elements, i18n) => {
   postsHead.after(ul);
 };
 
-const renderAppError = (error, elements, i18n) => {
+const renderAppError = (error, elements) => {
   elements.feedback.innerHTML = '';
   if (error) {
-    elements.feedback.textContent = i18n.t(error);
+    elements.feedback.textContent = i18next.t(error);
   }
 };
 
-const renderFormError = (state, elements, i18n) => {
+const renderFormError = (state, elements) => {
   const { rssField } = state.form;
   if (rssField.valid) {
     elements.input.classList.remove('danger-text');
@@ -111,11 +112,11 @@ const renderFormError = (state, elements, i18n) => {
   } else {
     elements.input.classList.add('is-invalid');
     elements.feedback.classList.add('text-danger');
-    elements.feedback.textContent = i18n.t(rssField.error);
+    elements.feedback.textContent = i18next.t(rssField.error);
   }
 };
 
-const renderForm = (dataProcess, elements, i18n) => {
+const renderForm = (dataProcess, elements) => {
   switch (dataProcess) {
     case 'initial':
       elements.submitButton.focus();
@@ -146,7 +147,7 @@ const renderForm = (dataProcess, elements, i18n) => {
       elements.input.select();
       elements.feedback.classList.add('text-success');
       elements.feedback.classList.remove('text-danger');
-      elements.feedback.textContent = i18n.t('successMessage');
+      elements.feedback.textContent = i18next.t('successMessage');
       break;
     default:
       throw new Error(`Unknown process ${dataProcess}`);
@@ -169,14 +170,14 @@ const renderModalContent = (state, elements) => {
   elements.modalElements.modalRef.href = postLink;
 };
 
-const initview = (state, elements, i18n) => {
+const initview = (state, elements) => {
   const mapping = {
-    feeds: () => renderFeeds(state, elements, i18n),
-    posts: () => renderPosts(state, elements, i18n),
-    error: () => renderAppError(state.error, elements, i18n),
-    'form.rssField': () => renderFormError(state, elements, i18n),
-    dataProcess: () => renderForm(state.dataProcess, elements, i18n),
-    'uiState.readPosts': () => renderPosts(state, elements, i18n),
+    feeds: () => renderFeeds(state, elements),
+    posts: () => renderPosts(state, elements),
+    error: () => renderAppError(state.error, elements),
+    'form.rssField': () => renderFormError(state, elements),
+    dataProcess: () => renderForm(state.dataProcess, elements),
+    'uiState.readPosts': () => renderPosts(state, elements),
     modalContentId: () => renderModalContent(state, elements),
   };
 
