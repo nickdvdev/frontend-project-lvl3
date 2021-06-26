@@ -24,7 +24,7 @@ const init = (i18n) => {
       modalBody: document.querySelector('.modal-body'),
       modalRef: document.querySelector('.full-article'),
       modalCloseButtons: document.querySelectorAll(
-        'button[data-dismiss="modal"]'
+        'button[data-dismiss="modal"]',
       ),
     },
   };

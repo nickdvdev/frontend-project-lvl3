@@ -54,7 +54,7 @@ const renderPosts = (state, elements, i18n) => {
       'list-group-item',
       'd-flex',
       'justify-content-between',
-      'align-items-start'
+      'align-items-start',
     );
 
     const linkElement = document.createElement('a');
@@ -77,7 +77,7 @@ const renderPosts = (state, elements, i18n) => {
       actualFontClassBootstrap5,
       'text-decoration-none',
       'm-2',
-      'link'
+      'link',
     );
 
     const modalButton = document.createElement('button');

@@ -26,7 +26,8 @@ export const validate = (url, urls) => {
       notOneOf: 'errorMessage.existedRss',
     },
   });
-  const schema = yup.string().trim().url().required().notOneOf(urls);
+  const schema = yup.string().trim().url().required()
+    .notOneOf(urls);
 
   try {
     schema.validateSync(url);
@@ -39,7 +40,7 @@ export const validate = (url, urls) => {
 const addProxy = (url) => {
   const urlWithProxy = new URL(
     '/get',
-    'https://hexlet-allorigins.herokuapp.com'
+    'https://hexlet-allorigins.herokuapp.com',
   );
   urlWithProxy.searchParams.set('url', url);
   urlWithProxy.searchParams.set('disableCache', true);
@@ -57,24 +58,20 @@ export const sendRequest = (url) => {
 export const fetchNewPosts = (state) => {
   const { feeds, posts: statePosts } = state;
   const fetchingTime = 5000;
-  const promises = feeds.map((feed) =>
-    sendRequest(feed.url).then((responseData) => ({
-      id: feed.id,
-      responseData,
-    }))
-  );
+  const promises = feeds.map((feed) => sendRequest(feed.url).then((responseData) => ({
+    id: feed.id,
+    responseData,
+  })));
   const promise = Promise.all(promises);
 
   promise
-    .then((responses) =>
-      responses.flatMap((item) => {
-        const { id, responseData } = item;
-        const parsedItems = parse(responseData);
-        const { posts: receivedPosts } = parsedItems;
-        const postsWithFeedId = receivedPosts.map((post) => ({ ...post, id }));
-        return postsWithFeedId;
-      })
-    )
+    .then((responses) => responses.flatMap((item) => {
+      const { id, responseData } = item;
+      const parsedItems = parse(responseData);
+      const { posts: receivedPosts } = parsedItems;
+      const postsWithFeedId = receivedPosts.map((post) => ({ ...post, id }));
+      return postsWithFeedId;
+    }))
     .then((posts) => {
       const newPosts = _.differenceBy(posts, statePosts, 'title');
       const newPostsWithPostId = newPosts.map((item) => ({

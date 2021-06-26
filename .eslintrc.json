@@ -6,20 +6,17 @@
   },
   "extends": [
     "airbnb-base",
-    "prettier",
     "plugin:jest/recommended",
     "plugin:functional/external-recommended",
     "plugin:functional/recommended"
   ],
-  "plugins": ["prettier", "jest", "functional", "babel", "import"],
+  "plugins": ["jest", "functional", "babel", "import"],
   "parserOptions": {
-    "ecmaVersion": 2020,
-    "sourceType": "module"
+    "ecmaVersion": 2020
   },
   "rules": {
     "no-console": 0,
     "import/extensions": 0,
-    "prettier/prettier": "error",
     "import/no-unresolved": 0,
     "functional/no-conditional-statement": 0,
     "functional/no-expression-statement": 0,
