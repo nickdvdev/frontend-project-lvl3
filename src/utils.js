@@ -1,5 +1,3 @@
-/* eslint-disable no-param-reassign */
-
 import axios from 'axios';
 import * as yup from 'yup';
 import { setLocale } from 'yup';
