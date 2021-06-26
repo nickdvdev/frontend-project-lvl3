@@ -10,16 +10,9 @@ import {
 import parse from './parser';
 import resources from './locales';
 
-export default () => {
-  const defaultLanguage = 'ru';
-  i18next
-    .init({
-      lng: defaultLanguage,
-      debug: true,
-      resources,
-    })
-    .catch((e) => new Error(e));
+console.log(process.env.NODE_ENV);
 
+const init = (i18n) => {
   const elements = {
     form: document.querySelector('form'),
     input: document.querySelector('input'),
@@ -63,14 +56,18 @@ export default () => {
     }, 1000);
   };
 
-  const watchedState = initview(state, elements);
+  const watchedState = initview(state, elements, i18n);
 
-  const handleSubmit = (e) => {
+  elements.form.addEventListener('submit', (e) => {
     e.preventDefault();
+
     const formData = new FormData(e.target);
     const url = formData.get('url');
+
     const urls = watchedState.savedUrls;
-    const error = validate(url, urls);
+
+    const error = validate(url, urls, i18n);
+
     if (error) {
       watchedState.form.rssField = {
         valid: false,
@@ -78,11 +75,14 @@ export default () => {
       };
       return;
     }
+
     watchedState.form.rssField = {
       valid: true,
       error: null,
     };
+
     watchedState.dataProcess = 'sending';
+
     sendRequest(url)
       .then((xml) => {
         const data = parse(xml);
@@ -95,12 +95,16 @@ export default () => {
         watchedState.dataProcess = 'failed';
         watchedState.error = getLoadingProcessErrorType(err);
       });
-  };
+  });
 
   const handleClose = (e) => {
     e.preventDefault();
     watchedState.modalContentId = null;
   };
+
+  elements.modalElements.modalCloseButtons.forEach((button) => {
+    button.addEventListener('click', handleClose);
+  });
 
   elements.posts.addEventListener('click', (e) => {
     if (!('id' in e.target.dataset)) {
@@ -112,10 +116,20 @@ export default () => {
     watchedState.modalContentId = id;
   });
 
-  elements.modalElements.modalCloseButtons.forEach((button) => {
-    button.addEventListener('click', handleClose);
-  });
-
-  elements.form.addEventListener('submit', handleSubmit);
   fetchNewPosts(watchedState);
 };
+
+const runApp = () => {
+  const defaultLanguage = 'ru';
+  const newInstance = i18next.createInstance();
+  newInstance
+    .init({
+      lng: defaultLanguage,
+      debug: true,
+      resources,
+    })
+    .then(() => init(newInstance))
+    .catch((e) => new Error(e));
+};
+
+export default runApp;
